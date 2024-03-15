@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -673,6 +674,13 @@ func (p *Player) lyricListener(_ int64, content, transContent string, _ bool, in
 	if transContent != "" {
 		p.lyrics[curIndex] += " [" + transContent + "]"
 	}
+
+	// mine
+	lyricTmpName := "/tmp/lyric_c"
+	file, _ := os.OpenFile(lyricTmpName, os.O_WRONLY|os.O_CREATE, 0666)
+	defer file.Close()
+	file.Truncate(0)
+	file.WriteString(content + " " + transContent)
 
 	// after
 	for i := 1; i < len(p.lyrics)-curIndex; i++ {
